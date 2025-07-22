@@ -1,19 +1,18 @@
+package CouponCategory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CouponDispatcher {
+public class CouponCategory {
     static class Coupon {
         String couponName;
         Date dateModified;
-
 
         Coupon(String couponName) {
             this.couponName = couponName;
@@ -37,7 +36,6 @@ public class CouponDispatcher {
     private static final String dateFormat = "yyyy-MM-dd";
 
     //this is O(1)
-
     private static String findParent(String category) {
 
         String parentCategory = categoryToParentMap.get(category);
@@ -59,25 +57,25 @@ public class CouponDispatcher {
         if (categoryWhichHasCoupon.equals("Null")) {
             return categoryWhichHasCoupon;
         }
-        return categoryToCouponsMap.get(categoryWhichHasCoupon).get(0).couponName;
+        return categoryToCouponsMap.get(categoryWhichHasCoupon).getFirst().couponName;
     }
 
     public static void main(String[] args) throws ParseException {
 
-//        List<String[]> coupons = List.of(
-//                new String[]{"CategoryName:Comforter Sets", "CouponName:Comforters Sale", "DateModified:2022-01-01"},
-//                new String[]{"CategoryName:Comforter Sets", "CouponName:Cozy Comforter Coupon", "DateModified:2018-01-01"},
-//                new String[]{"CategoryName:Bedding", "CouponName:Best Bedding Bargains", "DateModified:2019-01-01"},
-//                new String[]{"CategoryName:Bedding", "CouponName:Savings on Bedding", "DateModified:2022-01-01"},
-//                new String[]{"CategoryName:Bed & Bath", "CouponName:Low price for Bed & Bath", "DateModified:2018-01-01"},
-//                new String[]{"CategoryName:Bed & Bath", "CouponName:Bed & Bath extravaganza", "DateModified:2019-01-01"}
-//        );
-
         List<String[]> coupons = List.of(
-                new String[]{"CategoryName:Comforter Sets", "CouponName:Comforters Sale"},
-                new String[]{"CategoryName:Bedding", "CouponName:Savings on Bedding"},
-                new String[]{"CategoryName:Bed & Bath", "CouponName:Low price for Bed & Bath"}
+                new String[]{"CategoryName:Comforter Sets", "CouponName:Comforters Sale", "DateModified:2022-01-01"},
+                new String[]{"CategoryName:Comforter Sets", "CouponName:Cozy Comforter Coupon", "DateModified:2018-01-01"},
+                new String[]{"CategoryName:Bedding", "CouponName:Best Bedding Bargains", "DateModified:2019-01-01"},
+                new String[]{"CategoryName:Bedding", "CouponName:Savings on Bedding", "DateModified:2022-01-01"},
+                new String[]{"CategoryName:Bed & Bath", "CouponName:Low price for Bed & Bath", "DateModified:2018-01-01"},
+                new String[]{"CategoryName:Bed & Bath", "CouponName:Bed & Bath extravaganza", "DateModified:2019-01-01"}
         );
+
+//        List<String[]> coupons = List.of(
+//                new String[]{"CategoryName:Comforter Sets", "CouponName:Comforters Sale"},
+//                new String[]{"CategoryName:Bedding", "CouponName:Savings on Bedding"},
+//                new String[]{"CategoryName:Bed & Bath", "CouponName:Low price for Bed & Bath"}
+//        );
 
         List<String[]> categories = List.of(
                 new String[]{"CategoryName:Comforter Sets", "CategoryParentName:Bedding"},
@@ -93,10 +91,10 @@ public class CouponDispatcher {
 
         for (String[] coupon : coupons) {
             categoryToCouponsMap.computeIfAbsent(coupon[0].split(":")[1], k -> new ArrayList<>());
-//            categoryToCouponsMap.get(coupon[0].split(":")[1]).add(new Coupon(coupon[1].split(":")[1], simpleDateFormat.parse(coupon[2].split(":")[1])));
-            categoryToCouponsMap.get(coupon[0].split(":")[1]).add(new Coupon(coupon[1].split(":")[1]));
+            categoryToCouponsMap.get(coupon[0].split(":")[1]).add(new Coupon(coupon[1].split(":")[1], simpleDateFormat.parse(coupon[2].split(":")[1])));
+//            categoryToCouponsMap.get(coupon[0].split(":")[1]).add(new Coupon(coupon[1].split(":")[1]));
         }
-
+// sorting to get the most recent coupons every time
         for (Map.Entry<String, List<Coupon>> couponsEntry : categoryToCouponsMap.entrySet()) {
             couponsEntry.getValue().sort((a, b) ->
                     b.dateModified.compareTo(a.dateModified));

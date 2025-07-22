@@ -1,6 +1,7 @@
+package OrderManagementCode;
 import java.util.*;
 
-class GlobalVariable{
+class GlobalVariable {
     static Map<Integer, Double> itemPrices = Map.of(
             1, 10.0,
             2, 25.0,
@@ -8,44 +9,44 @@ class GlobalVariable{
     );
 }
 
-class User{
+class User {
     String userId;
     String name;
     String email;
 
-    User(String id, String name){
+    User(String id, String name) {
         this.userId = id;
         this.name = name;
     }
 }
 
-class Cart{
+class Cart {
     Set<Integer> items;
     Map<Integer, Integer> itemsToQty;
 
-    Cart(){
+    Cart() {
         this.items = new HashSet<>();
         this.itemsToQty = new HashMap<>();
     }
 
 
-    void addItem(int itemId, int quantity) throws Exception{
-        if(!GlobalVariable.itemPrices.containsKey(itemId)){
+    void addItem(int itemId, int quantity) throws Exception {
+        if (!GlobalVariable.itemPrices.containsKey(itemId)) {
             throw new IllegalArgumentException("InValid Item id: " + itemId);
         }
         items.add(itemId);
         itemsToQty.put(itemId, itemsToQty.getOrDefault(itemId, 0) + quantity);
     }
 
-    void removeItem(int itemId){
+    void removeItem(int itemId) {
         items.remove(itemId);
         itemsToQty.remove(itemId);
     }
 
-    double getCartTotal(){
+    double getCartTotal() {
         double rawTotal = 0;
         double tax = 0;
-        for(Map.Entry<Integer, Integer> entry: itemsToQty.entrySet()){
+        for (Map.Entry<Integer, Integer> entry : itemsToQty.entrySet()) {
 
             double unitPrice = GlobalVariable.itemPrices.get(entry.getKey());
             double itemTotal = unitPrice * entry.getValue();
@@ -56,16 +57,16 @@ class Cart{
         System.out.println(" Raw Total " + rawTotal);
         return rawTotal;
 
-    };
+    }
 
 }
 
 
-class OrderManagementSystem {
 
+class OrderManagementSystem {
     Map<String, Cart> userToCart;
 
-    public OrderManagementSystem(){
+    public OrderManagementSystem() {
         this.userToCart = new HashMap<>();
     }
 
@@ -73,34 +74,43 @@ class OrderManagementSystem {
         Cart usersCart = userToCart.getOrDefault(userId, new Cart());
         usersCart.addItem(itemId, quantity);
         userToCart.put(userId, usersCart);
-    };
-    void removeItemFromCart(String userId, int itemId){
-        if(!userToCart.containsKey(userId)){
+    }
+
+    ;
+
+    void removeItemFromCart(String userId, int itemId) {
+        if (!userToCart.containsKey(userId)) {
             System.out.println(" User Id not present !");
             return;
         }
         Cart usersCart = userToCart.get(userId);
         usersCart.removeItem(itemId);
 
-    };
-    double calculateTotal(String userId){
-        if(!userToCart.containsKey(userId)){
+    }
+
+    ;
+
+    double calculateTotal(String userId) {
+        if (!userToCart.containsKey(userId)) {
             System.out.println(" User Id not present !");
             return -1.0;
         }
         Cart usersCart = userToCart.get(userId);
         return usersCart.getCartTotal();
-    };
-    double checkout(String userId){
+    }
 
-        if(!userToCart.containsKey(userId)){
+    ;
+
+    double checkout(String userId) {
+
+        if (!userToCart.containsKey(userId)) {
             System.out.println(" User Id not present !");
             return -1.0;
         }
         Cart usersCart = userToCart.get(userId);
         double rawTotal = usersCart.getCartTotal();
         double discount = 0;
-        if(rawTotal > 100){
+        if (rawTotal > 100) {
             discount = 0.05 * rawTotal;
         }
         rawTotal -= discount;
@@ -108,12 +118,12 @@ class OrderManagementSystem {
         System.out.println("Tax: " + tax);
 
         return rawTotal + tax;
-    };
+    }
+
+    ;
 }
 
-
-
-public class Driver {
+public class OrderManagement {
     public static void main(String[] args) throws Exception {
 
 
