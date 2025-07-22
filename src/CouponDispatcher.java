@@ -36,14 +36,15 @@ public class CouponDispatcher {
 
     private static final String dateFormat = "yyyy-MM-dd";
 
+    //this is O(1)
+
     private static String findParent(String category) {
 
         String parentCategory = categoryToParentMap.get(category);
-        if (parentCategory.equals("Null")) {
-            return parentCategory;
-        } else if (categoryToCouponsMap.containsKey(parentCategory)) {
-            return parentCategory;
-        }
+        if (parentCategory.equals("Null")) return parentCategory;
+        // if a category has a coupon it should not move up the hierarchy
+        else if (categoryToCouponsMap.containsKey(parentCategory)) return parentCategory;
+
         categoryToParentMap.put(category, findParent(parentCategory));
         return categoryToParentMap.get(category);
     }
